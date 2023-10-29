@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import MainMint from "./MainStake"
+import MainStake from "./MainStake"
 import NavBar from "./NavBar"
 
 function App(){
@@ -10,7 +10,7 @@ function App(){
     <div className="overlay">
       <div className="App">
         <NavBar accounts={accounts} setAccounts={setAccounts}/>
-        <MainMint accounts={accounts} setAccounts={setAccounts}/>
+        <MainStake accounts={accounts} setAccounts={setAccounts}/>
       </div>
       <div className="moving-background"></div>
     </div>
