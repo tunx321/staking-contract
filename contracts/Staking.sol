@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 
 contract Staking {
     address public owner;
-    uint public stakingPeriod;
+    uint public stakingPeriod = 86400;
     uint public totalRewards;
     uint minVlaue = 0.05 ether;
 
@@ -14,9 +14,8 @@ contract Staking {
 
 
 
-    constructor(uint _stakingPeriod) payable  {
+    constructor() payable  {
         owner = msg.sender;
-        stakingPeriod = _stakingPeriod;
         totalRewards = msg.value;
     }
 
