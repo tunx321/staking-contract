@@ -4,9 +4,10 @@ pragma solidity ^0.8.20;
 
 contract Staking {
     address public owner;
-    uint public stakingPeriod = 86400;
+    uint public stakingPeriod;
     uint public totalRewards;
-    uint minVlaue = 0.05 ether;
+    uint public minValue = 0.05 ether;
+    uint public totalStakers;
 
     mapping(address => uint) public userBalances;
     mapping(address => uint) public stakedBalances;
@@ -14,19 +15,22 @@ contract Staking {
 
 
 
-    constructor() payable  {
+    constructor(uint _stakingPeriod) payable  {
         owner = msg.sender;
+        stakingPeriod = _stakingPeriod;
         totalRewards = msg.value;
     }
 
     function stake() public payable {
-        require(msg.value >= minVlaue, "Must be greater than 0.05 ether");
+        require(msg.value >= minValue, "Must be greater than 0.05 ether");
         require(msg.sender.balance >= msg.value, "Insufficient balance");
+        require(stakedBalances[msg.sender] == 0, "You already have stake");
         userBalances[msg.sender] = msg.sender.balance;
         uint _amount = msg.value;
         userBalances[msg.sender] -= _amount;
         stakedBalances[msg.sender] += _amount;
         stakingStartTimes[msg.sender] = block.timestamp;
+        totalStakers++;
     }
 
     function calculateRewards() public view returns (uint) {
@@ -41,13 +45,14 @@ contract Staking {
     }
 
     function withdraw() public {
-        require(stakedBalances[msg.sender] >= minVlaue, "You dont have a stake balance");
+        require(stakedBalances[msg.sender] >= minValue, "You dont have a stake balance");
         uint rewards = calculateRewards();
         uint totalAmount = stakedBalances[msg.sender] + rewards;        
         userBalances[msg.sender] += totalAmount;
         stakedBalances[msg.sender] = 0;
         stakingStartTimes[msg.sender] = 0;
         totalRewards -= rewards;
+        totalStakers--;
         payable(msg.sender).transfer(totalAmount);
     
     }

@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 async function main() {
   const Staking = await hre.ethers.getContractFactory("Staking")
-  const staking = await Staking.deploy("0xd3106F16102e2AEF6AC5D3E371c121885aa4f82e");
+  const staking = await Staking.deploy("86400");
 
   await staking.waitForDeployment()
   console.log("Contract address: ", await staking.getAddress());
