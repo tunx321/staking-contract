@@ -6,7 +6,7 @@ contract Staking {
     address public owner;
     uint public stakingPeriod;
     uint public totalRewards;
-    uint public minValue = 0.05 ether;
+    uint public minValue = 0.005 ether;
     uint public totalStakers;
 
     mapping(address => uint) public userBalances;
@@ -22,7 +22,7 @@ contract Staking {
     }
 
     function stake() public payable {
-        require(msg.value >= minValue, "Must be greater than 0.05 ether");
+        require(msg.value >= minValue, "Must be greater than 0.005 ether");
         require(msg.sender.balance >= msg.value, "Insufficient balance");
         require(stakedBalances[msg.sender] == 0, "You already have stake");
         userBalances[msg.sender] = msg.sender.balance;
