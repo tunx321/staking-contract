@@ -13,8 +13,7 @@ describe("Staking contract", function(){
 
   describe("Deployment", function() {
     it("should return correct minimum value and staking period(1 day)", async function(){
-
-      expect(await myContractDeployed.minValue()).to.equal("50000000000000000"); //0.05 ethers
+      expect(await myContractDeployed.minValue()).to.equal("5000000000000000"); //0.005 ethers
       expect(await myContractDeployed.stakingPeriod()).to.equal("86400")         // 1 day
     });
   

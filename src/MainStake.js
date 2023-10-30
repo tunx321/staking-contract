@@ -1,6 +1,7 @@
 import { useState } from "react";
 import stakingABI from "./Staking.json"
-import { Box, Button, Flex, Input} from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Image} from '@chakra-ui/react';
+import Restart from "./assets/restart.png"
 const { ethers } = require("ethers");
 
 const contractAddress = "0x7096f47674Ee5a5ce081e93C1BFB07C3ACaDb351";
@@ -9,7 +10,7 @@ const MainStake = ({accounts, setAccounts}) =>{
     const isConnected = Boolean(accounts[0])
     const [amount, setAmount] = useState('')
     const [balance, setBalance] = useState('')
-    
+    const [time, setTime] = useState('')
 
     async function handleStake(){
 
@@ -72,8 +73,29 @@ const MainStake = ({accounts, setAccounts}) =>{
             )
 
             try {
-                const totalStakers= await contract.withdraw()
-                console.log(totalStakers);
+                const tx= await contract.withdraw()
+                console.log(tx);
+            } catch (error) {
+                console.log("erorr: ", error)
+            }
+        }
+    }
+
+
+    async function handleTimeLeft(){
+        if (window.ethereum){
+            const provider = new ethers.BrowserProvider(window.ethereum)
+            const signer = await provider.getSigner()
+            const contract = new ethers.Contract(
+                contractAddress,
+                stakingABI.abi,
+                signer,
+            )
+
+            try {
+                const timeLeft = await contract.timeLeft()
+                setTime(String(timeLeft))
+                console.log(String(timeLeft))
             } catch (error) {
                 console.log("erorr: ", error)
             }
@@ -86,6 +108,7 @@ const MainStake = ({accounts, setAccounts}) =>{
 
 
     return (
+        
 
         <Flex justify="center" align="center" height="100vh" paddingBottom="150px">
             <Box width="520px">
@@ -123,7 +146,10 @@ const MainStake = ({accounts, setAccounts}) =>{
                         value={amount} 
                         onChange={(e)=> setAmount(e.target.value)}/>
             <p>Balance: <span>{balance} ETH</span></p>
-            <p>Staking period: <span >86400 seconds</span></p>
+            <p>Staking period: <span >{ time } seconds</span> 
+            <br></br>
+                <a href="#" onClick={handleTimeLeft}><Image src={Restart} boxSize="20px"/></a>
+            </p>
             <Button 
                      backgroundColor="#D6517D" 
                      borderRadius="5px"
@@ -138,6 +164,7 @@ const MainStake = ({accounts, setAccounts}) =>{
 
         <div>
             <h3>Withdraw</h3>
+            <p>Through one day you will get x2 of your balance </p>
             <Button 
                      backgroundColor="#D6517D" 
                      borderRadius="5px"
